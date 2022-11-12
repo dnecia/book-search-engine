@@ -1,11 +1,11 @@
 //importing the dependencies
 const express = require('express');
-const { AppolloServer } = require('appollo-server-express');
+const { ApolloServer } = require('appollo-server-express');
 const { authMiddleware } = require('./utils/auth');
 const path = require('path');
 const db = require('./config/connection');
-const routes = require('./routes');
-const { ApolloServer } = require('apollo-server-express');
+const { typeDefs, resolvers} = require('./utils/schemas');
+
 
 //importing the typeDefs and resolvers
 
@@ -26,8 +26,21 @@ if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../client/build')));
 }
 
-app.use(routes);
-
-db.once('open', () => {
-  app.listen(PORT, () => console.log(`🌍 Now listening on localhost:${PORT}`));
+app.get('/', (req,res) => {
+  res.sendFile(path.join(_dirname, '../client/build/index.html'));
 });
+
+//new apollo server with the graphql schema
+const startApolloServer = async (typeDefs, resolvers) => {
+  await server.start();
+  server.applyMiddleware({ app });
+
+ db. once('open', () => {
+  app.listen(PORT, () => {
+    console.log(`API server running on port ${PORT}!`);
+    console.log(`Use GraphQL at http://localhost:${PORT}${server.graphqlPath}`);
+  })
+ })
+};
+//start the function
+startApolloServer(typeDefs, resolvers);
