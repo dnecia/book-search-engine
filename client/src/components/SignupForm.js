@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
-//import { createUser } from '../utils/API';
-// for refactor, hints from classwork activities in "MERN" week 
+
 import { useMutation } from '@apollo/client';
 import { ADD_USER } from '../utils/mutations';
 import Auth from '../utils/auth';
@@ -39,7 +38,6 @@ const SignupForm = () => {
       event.stopPropagation();
     }
 
-    // new code
     try {
       const { data } = await addUser({
         variables: { ...userFormData },
