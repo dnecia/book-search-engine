@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
-import Auth from '../utils/auth';
-import {ADD_USER} from '../utils/mutations';
+//import { createUser } from '../utils/API';
+// for refactor, hints from classwork activities in "MERN" week 
 import { useMutation } from '@apollo/client';
+import { ADD_USER } from '../utils/mutations';
+import Auth from '../utils/auth';
 
 const SignupForm = () => {
   // set initial form state
@@ -12,9 +14,10 @@ const SignupForm = () => {
   // set state for alert
   const [showAlert, setShowAlert] = useState(false);
 
+  // new code
   const [addUser, { error }] = useMutation(ADD_USER);
-
-  useEffect(()=> {
+  
+  useEffect(() => {
     if (error) {
       setShowAlert(true);
     } else {
@@ -37,11 +40,13 @@ const SignupForm = () => {
       event.stopPropagation();
     }
 
+    // new code
     try {
-     const {data} = await addUser({
-       variables: {...userFormData },
-     });
-     Auth.login(data.addUser.token);
+      const { data } = await addUser({
+        variables: { ...userFormData },
+      });
+
+      Auth.login(data.addUser.token);
     } catch (err) {
       console.error(err);
     };
