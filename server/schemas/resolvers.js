@@ -24,6 +24,12 @@ const resolvers = {
             if (!user) {
                 throw new AuthenticationError('No matching credentials');
             }
+            const correctPw = await user.isCorrectPassword(password);
+
+            if (!correctPw) {
+                throw new AuthenticationError ('No matching credentials');
+            }
+
             const token = signToken(user);
             return { token, user };
         },
