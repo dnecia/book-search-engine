@@ -6,7 +6,7 @@ const resolvers = {
     Query: {
         me: async (parent, args, context) => {
             if (context.user) {
-                data = await (await User.findOne({ _id: context.user._id })).isSelected('-__v -password');
+                data = await (await User.findOne({ _id: context.user._id })).select('-__v -password');
                 return data;
             }
             throw new AuthenticationError('Please Log In');
@@ -14,11 +14,11 @@ const resolvers = {
     },
 
     Mutation: {
-        addUser: async (parent, { username, email, password}) => {
+        addUser: async (parent, { username, email, password }) => {
             const user = await User.create({ username, email, password });
             const token = signToken(user);
             return { token, user };
-        },
+          },
         login: async (parent, { email, password }) => {
             const user = await User.findOne({ email });
             if (!user) {
